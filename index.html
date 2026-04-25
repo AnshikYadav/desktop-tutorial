@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Maths Progress Tracker | Class 11, 12 & NDA</title>
+  <title>Study Progress Tracker | Courses and Subjects</title>
   <style>
     :root {
       --bg: #f4f7fb;
@@ -451,6 +451,89 @@
       color: var(--success);
     }
 
+    .course-switcher {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .course-chip {
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(20, 33, 61, 0.1);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .course-chip.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.24);
+    }
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .subject-card {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(20, 33, 61, 0.08);
+      background: rgba(247, 250, 255, 0.96);
+    }
+
+    .subject-card.active {
+      border-color: rgba(37, 99, 235, 0.18);
+      background: linear-gradient(160deg, rgba(239, 246, 255, 0.98), rgba(255, 255, 255, 0.98));
+      box-shadow: 0 14px 24px rgba(37, 99, 235, 0.1);
+    }
+
+    .subject-card h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+    }
+
+    .subject-card p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    .subject-status {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--primary-2);
+    }
+
+    .empty-state {
+      display: grid;
+      gap: 12px;
+      padding: 26px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px dashed rgba(20, 33, 61, 0.16);
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .empty-state h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .empty-state p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
     .section-head {
       display: flex;
       justify-content: space-between;
@@ -813,10 +896,10 @@
     <section class="hero">
       <div class="hero-grid">
         <div>
-          <span class="eyebrow">Maths Syllabus Tracker</span>
-          <h1>Track Class 11, Class 12 and NDA Maths with one clean dashboard.</h1>
+          <span class="eyebrow">Study Progress Tracker</span>
+          <h1>Track your courses, subjects, and chapter progress from one clean dashboard.</h1>
           <p>
-            Monitor every chapter, save your progress, expand topics when you need detail, and watch both chapter-wise and overall completion update smoothly in real time.
+            Switch between CBSE Class 11, CBSE Class 12, NDA, CUET, and CDS, then study subject-wise with saved progress, streaks, and clean chapter tracking.
           </p>
 
           <div class="hero-actions">
@@ -826,7 +909,7 @@
         </div>
 
         <aside class="summary-panel">
-          <h2>Overall Maths Completion</h2>
+          <h2>Selected Course Progress</h2>
           <p class="summary-copy" id="welcomeText">Set your student profile, daily goal, and keep your streak alive.</p>
 
           <div class="summary-stats">
@@ -885,13 +968,13 @@
                   <input id="studentNameInput" type="text" placeholder="Enter your name" />
                 </div>
                 <div class="field">
-                  <label for="examTargetSelect">Exam Target</label>
+                  <label for="examTargetSelect">Selected Course</label>
                   <select id="examTargetSelect">
                     <option value="CBSE Class 11">CBSE Class 11</option>
                     <option value="CBSE Class 12">CBSE Class 12</option>
-                    <option value="CBSE + NDA">CBSE + NDA</option>
-                    <option value="NDA Maths Focus">NDA Maths Focus</option>
-                    <option value="Boards + NDA Revision">Boards + NDA Revision</option>
+                    <option value="NDA">NDA</option>
+                    <option value="CUET">CUET</option>
+                    <option value="CDS">CDS</option>
                   </select>
                 </div>
                 <div class="field">
@@ -928,10 +1011,17 @@
       <div class="badge-grid" id="badgeGrid"></div>
     </section>
 
+    <section class="surface-panel">
+      <h2>Course Switcher</h2>
+      <p id="courseSummary">Choose a course to load its current subject layout. Maths is ready now for CBSE Class 11, CBSE Class 12, and NDA.</p>
+      <div class="course-switcher" id="courseSwitcher"></div>
+      <div class="subject-grid" id="subjectGrid"></div>
+    </section>
+
     <div class="section-head">
       <div>
-        <h2>Complete Maths Syllabus</h2>
-        <p>CBSE Class 11, CBSE Class 12, and NDA-oriented revision topics, all in one responsive tracker.</p>
+        <h2 id="chapterSectionTitle">Course Syllabus</h2>
+        <p id="chapterSectionText">View the currently available subject content for your selected course.</p>
       </div>
     </div>
 
@@ -1433,6 +1523,77 @@
       }
     ];
 
+    const courseCatalog = [
+      {
+        id: "CBSE Class 11",
+        shortLabel: "CBSE 11",
+        description: "Board-focused study flow for Class 11 chapters and subjects."
+      },
+      {
+        id: "CBSE Class 12",
+        shortLabel: "CBSE 12",
+        description: "Board-focused study flow for Class 12 preparation."
+      },
+      {
+        id: "NDA",
+        shortLabel: "NDA",
+        description: "Exam-oriented study view for NDA maths and later NDA subjects."
+      },
+      {
+        id: "CUET",
+        shortLabel: "CUET",
+        description: "Course shell ready for CUET subjects and topic lists."
+      },
+      {
+        id: "CDS",
+        shortLabel: "CDS",
+        description: "Course shell ready for CDS subjects and chapter sets."
+      }
+    ];
+
+    const subjectCatalog = {
+      "CBSE Class 11": [
+        {
+          id: "mathematics",
+          title: "Mathematics",
+          description: "Complete Class 11 maths chapters are active now.",
+          available: true
+        }
+      ],
+      "CBSE Class 12": [
+        {
+          id: "mathematics",
+          title: "Mathematics",
+          description: "Complete Class 12 maths chapters are active now.",
+          available: true
+        }
+      ],
+      "NDA": [
+        {
+          id: "mathematics",
+          title: "Mathematics",
+          description: "NDA maths revision topics are active now.",
+          available: true
+        }
+      ],
+      "CUET": [
+        {
+          id: "subjects-coming-soon",
+          title: "Subjects Coming Soon",
+          description: "We will add CUET subjects course-wise next.",
+          available: false
+        }
+      ],
+      "CDS": [
+        {
+          id: "subjects-coming-soon",
+          title: "Subjects Coming Soon",
+          description: "We will add CDS subjects course-wise next.",
+          available: false
+        }
+      ]
+    };
+
     const STORAGE_KEY = "maths-progress-tracker-cbse-nda-v1";
     const EXPANDED_KEY = "maths-progress-tracker-expanded-v1";
     const PROFILE_KEY = "maths-progress-tracker-profile-v1";
@@ -1501,6 +1662,11 @@
     const dailyGoalInput = document.getElementById("dailyGoalInput");
     const saveProfileBtn = document.getElementById("saveProfileBtn");
     const badgeGrid = document.getElementById("badgeGrid");
+    const courseSwitcher = document.getElementById("courseSwitcher");
+    const subjectGrid = document.getElementById("subjectGrid");
+    const courseSummary = document.getElementById("courseSummary");
+    const chapterSectionTitle = document.getElementById("chapterSectionTitle");
+    const chapterSectionText = document.getElementById("chapterSectionText");
     const saveAllBtn = document.getElementById("saveAllBtn");
     const resetBtn = document.getElementById("resetBtn");
     const expandAllBtn = document.getElementById("expandAllBtn");
@@ -1518,6 +1684,42 @@
 
     function chapterId(chapter, index) {
       return `${chapter.category}-${slugify(chapter.title)}-${index}`;
+    }
+
+    function normalizeSelectedCourse(value) {
+      if (courseCatalog.some((course) => course.id === value)) return value;
+      if (value === "CBSE + NDA" || value === "NDA Maths Focus" || value === "Boards + NDA Revision") return "NDA";
+      if (String(value).includes("11")) return "CBSE Class 11";
+      if (String(value).includes("12")) return "CBSE Class 12";
+      return "CBSE Class 11";
+    }
+
+    function getCourseMeta(courseId = profileState.selectedCourse) {
+      return courseCatalog.find((course) => course.id === courseId) || courseCatalog[0];
+    }
+
+    function getSubjectsForCourse(courseId = profileState.selectedCourse) {
+      return subjectCatalog[courseId] || [];
+    }
+
+    function getCourseIdForChapter(chapter) {
+      if (chapter.category === "Class 11") return "CBSE Class 11";
+      if (chapter.category === "Class 12") return "CBSE Class 12";
+      if (chapter.category === "NDA Level") return "NDA";
+      return "";
+    }
+
+    function getActiveCourseChapters() {
+      const selectedCourse = normalizeSelectedCourse(profileState.selectedCourse);
+
+      return syllabus
+        .map((chapter, index) => ({
+          ...chapter,
+          originalIndex: index,
+          courseId: getCourseIdForChapter(chapter),
+          subjectId: "mathematics"
+        }))
+        .filter((chapter) => chapter.courseId === selectedCourse);
     }
 
     function loadProgress() {
@@ -1547,12 +1749,14 @@
     function loadProfile() {
       const defaults = {
         studentName: "",
-        examTarget: "CBSE + NDA",
+        selectedCourse: "CBSE Class 11",
         dailyGoal: 5
       };
 
       try {
-        return { ...defaults, ...(JSON.parse(localStorage.getItem(PROFILE_KEY)) || {}) };
+        const saved = { ...defaults, ...(JSON.parse(localStorage.getItem(PROFILE_KEY)) || {}) };
+        saved.selectedCourse = normalizeSelectedCourse(saved.selectedCourse || saved.examTarget);
+        return saved;
       } catch (error) {
         return defaults;
       }
@@ -1681,13 +1885,14 @@
       return { total, completed, percentage };
     }
 
-    function calculateOverallStats() {
+    function calculateOverallStats(chapters = getActiveCourseChapters()) {
       let totalTopics = 0;
       let completedTopics = 0;
       const chapterStats = [];
 
-      syllabus.forEach((chapter, index) => {
-        const id = chapterId(chapter, index);
+      chapters.forEach((chapter, index) => {
+        const chapterIndex = chapter.originalIndex ?? index;
+        const id = chapterId(chapter, chapterIndex);
         const selections = getChapterSelections(id, chapter.topics.length);
         const stats = calculateChapterStats(selections);
         totalTopics += stats.total;
@@ -1707,16 +1912,19 @@
 
     function populateProfileFields() {
       studentNameInput.value = profileState.studentName;
-      examTargetSelect.value = profileState.examTarget;
+      examTargetSelect.value = normalizeSelectedCourse(profileState.selectedCourse);
       dailyGoalInput.value = profileState.dailyGoal;
     }
 
     function saveProfileFromInputs() {
       profileState.studentName = studentNameInput.value.trim();
-      profileState.examTarget = examTargetSelect.value;
+      profileState.selectedCourse = normalizeSelectedCourse(examTargetSelect.value);
       profileState.dailyGoal = Math.min(50, Math.max(1, Number(dailyGoalInput.value) || 5));
       dailyGoalInput.value = profileState.dailyGoal;
       saveProfile();
+      renderCourseSwitcher();
+      renderSubjectGrid();
+      renderChapters();
       updateSummary();
       renderBadges();
       showToast("Profile saved.");
@@ -1725,9 +1933,10 @@
     function updateDashboardText(stats) {
       const name = profileState.studentName || "Student";
       const completedChapters = stats.chapterStats.filter((chapter) => chapter.percentage === 100).length;
+      const course = getCourseMeta();
 
-      welcomeText.textContent = `${name} is targeting ${profileState.examTarget} with a daily goal of ${profileState.dailyGoal} topic${profileState.dailyGoal === 1 ? "" : "s"}.`;
-      dashboardSummary.textContent = `${name}, you have completed ${stats.completedTopics} of ${stats.totalTopics} topics, finished ${completedChapters} chapter${completedChapters === 1 ? "" : "s"}, and you are currently focused on ${profileState.examTarget}.`;
+      welcomeText.textContent = `${name} is currently focused on ${course.id} with a daily goal of ${profileState.dailyGoal} topic${profileState.dailyGoal === 1 ? "" : "s"}.`;
+      dashboardSummary.textContent = `${name}, you have completed ${stats.completedTopics} of ${stats.totalTopics} topics, finished ${completedChapters} chapter${completedChapters === 1 ? "" : "s"}, and you are currently tracking ${course.id}.`;
     }
 
     function updateGoalPanel() {
@@ -1766,11 +1975,49 @@
       }).join("");
     }
 
+    function renderCourseSwitcher() {
+      const selectedCourse = normalizeSelectedCourse(profileState.selectedCourse);
+      const course = getCourseMeta(selectedCourse);
+
+      courseSummary.textContent = `${course.id}: ${course.description}`;
+      courseSwitcher.innerHTML = courseCatalog.map((entry) => `
+        <button class="course-chip${entry.id === selectedCourse ? " active" : ""}" type="button" data-course-id="${entry.id}">
+          ${entry.shortLabel}
+        </button>
+      `).join("");
+
+      courseSwitcher.querySelectorAll(".course-chip").forEach((button) => {
+        button.addEventListener("click", () => {
+          profileState.selectedCourse = button.dataset.courseId;
+          examTargetSelect.value = profileState.selectedCourse;
+          saveProfile();
+          renderCourseSwitcher();
+          renderSubjectGrid();
+          renderChapters();
+          updateSummary();
+        });
+      });
+    }
+
+    function renderSubjectGrid() {
+      const selectedCourse = normalizeSelectedCourse(profileState.selectedCourse);
+      const subjects = getSubjectsForCourse(selectedCourse);
+
+      subjectGrid.innerHTML = subjects.map((subject) => `
+        <article class="subject-card${subject.available ? " active" : ""}">
+          <h3>${subject.title}</h3>
+          <p>${subject.description}</p>
+          <span class="subject-status">${subject.available ? "Active now" : "Planned next"}</span>
+        </article>
+      `).join("");
+    }
+
     function updateSummary() {
-      const stats = calculateOverallStats();
+      const activeChapters = getActiveCourseChapters();
+      const stats = calculateOverallStats(activeChapters);
       totalTopicsStat.textContent = String(stats.totalTopics);
       completedTopicsStat.textContent = String(stats.completedTopics);
-      chapterCountStat.textContent = String(syllabus.length);
+      chapterCountStat.textContent = String(activeChapters.length);
       overallProgressLabel.textContent = `${stats.percentage}%`;
       overallProgressFill.style.width = `${stats.percentage}%`;
       overallProgressFill.style.filter = stats.percentage === 100 ? "saturate(1.15)" : "none";
@@ -1788,14 +2035,34 @@
       }, 1500);
     }
 
-    function renderChapters() {
+        function renderChapters() {
       chapterGrid.innerHTML = "";
+      const selectedCourse = normalizeSelectedCourse(profileState.selectedCourse);
+      const activeChapters = getActiveCourseChapters();
+      const availableSubjects = getSubjectsForCourse(selectedCourse).filter((subject) => subject.available);
 
-      syllabus.forEach((chapter, index) => {
-        const id = chapterId(chapter, index);
+      chapterSectionTitle.textContent = `${selectedCourse} Subjects`;
+
+      if (availableSubjects.length === 0 || activeChapters.length === 0) {
+        chapterSectionText.textContent = `No subject chapters have been added for ${selectedCourse} yet. We can add them course-wise next.`;
+        chapterGrid.innerHTML = `
+          <section class="empty-state">
+            <h3>${selectedCourse} is ready for new subjects</h3>
+            <p>This course shell is live, but its subject chapters have not been added yet. Tell me which subject to add next for ${selectedCourse} and I will wire it into this tracker.</p>
+          </section>
+        `;
+        updateSummary();
+        return;
+      }
+
+      chapterSectionText.textContent = `${availableSubjects.map((subject) => subject.title).join(", ")} is currently available for ${selectedCourse}.`;
+
+      activeChapters.forEach((chapter, displayIndex) => {
+        const chapterIndex = chapter.originalIndex ?? displayIndex;
+        const id = chapterId(chapter, chapterIndex);
         const selections = getChapterSelections(id, chapter.topics.length);
         const stats = calculateChapterStats(selections);
-        const expanded = expandedState[id] ?? index < 2;
+        const expanded = expandedState[id] ?? displayIndex < 2;
 
         const card = document.createElement("article");
         card.className = `chapter-card${expanded ? " expanded" : ""}${stats.percentage === 100 ? " completed" : ""}`;
@@ -1816,14 +2083,14 @@
 
         card.innerHTML = `
           <div class="chapter-top">
-            <div class="chapter-index">${index + 1}</div>
+            <div class="chapter-index">${displayIndex + 1}</div>
             <div class="chapter-meta">
-              <span class="chapter-badge">${stats.percentage === 100 ? "✔ Completed" : chapter.category}</span>
+              <span class="chapter-badge">${stats.percentage === 100 ? "Completed" : chapter.category}</span>
               <h3 class="chapter-title">${chapter.title}</h3>
               <p class="chapter-subtitle">${chapter.subtitle}</p>
             </div>
             <button class="chapter-toggle" type="button" aria-label="Toggle chapter">
-              <span class="arrow">▾</span>
+              <span class="arrow">&#9662;</span>
             </button>
           </div>
 
@@ -1852,7 +2119,7 @@
           </div>
         `;
 
-        bindChapterEvents(card, chapter, index);
+        bindChapterEvents(card, chapter, chapterIndex);
         chapterGrid.appendChild(card);
       });
 
@@ -1928,7 +2195,7 @@
 
       if (stats.percentage === 100) {
         card.classList.add("completed");
-        badge.textContent = "✔ Completed";
+        badge.textContent = "Completed";
       } else {
         card.classList.remove("completed");
         badge.textContent = chapter.category;
@@ -1939,8 +2206,9 @@
     }
 
     function setAllExpanded(expanded) {
-      syllabus.forEach((chapter, index) => {
-        const id = chapterId(chapter, index);
+      getActiveCourseChapters().forEach((chapter, index) => {
+        const chapterIndex = chapter.originalIndex ?? index;
+        const id = chapterId(chapter, chapterIndex);
         expandedState[id] = expanded;
       });
       saveExpandedState();
@@ -1987,7 +2255,10 @@
 
     populateProfileFields();
     ensureActivityCurrent();
+    renderCourseSwitcher();
+    renderSubjectGrid();
     renderChapters();
   </script>
 </body>
 </html>
+
