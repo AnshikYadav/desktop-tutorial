@@ -138,6 +138,13 @@
       font-weight: 700;
     }
 
+    .summary-copy {
+      margin: -2px 0 2px;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
     .summary-stats {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -245,6 +252,203 @@
       flex-wrap: wrap;
       gap: 12px;
       margin-top: 22px;
+    }
+
+    .dashboard-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .dashboard-panel {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .dashboard-panel h3 {
+      margin: 0 0 12px;
+      font-size: 0.98rem;
+      font-weight: 800;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-stat {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .mini-stat .stat-value {
+      font-size: 1.2rem;
+    }
+
+    .profile-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field label {
+      font-size: 0.84rem;
+      color: rgba(255, 255, 255, 0.78);
+      font-weight: 700;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font: inherit;
+      outline: none;
+    }
+
+    .field input::placeholder {
+      color: rgba(255, 255, 255, 0.46);
+    }
+
+    .field select option {
+      color: #111827;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: rgba(255, 255, 255, 0.42);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+    }
+
+    .goal-progress-card {
+      display: grid;
+      gap: 12px;
+    }
+
+    .goal-headline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+
+    .goal-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 96px;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      font-weight: 800;
+    }
+
+    .goal-note {
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    .section-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 1.2fr 1fr;
+      margin-bottom: 20px;
+    }
+
+    .surface-panel {
+      padding: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .surface-panel h2 {
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+    }
+
+    .surface-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .badge-card {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(20, 33, 61, 0.08);
+      background: rgba(247, 250, 255, 0.95);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
+    }
+
+    .badge-card.unlocked {
+      background: linear-gradient(160deg, rgba(236, 253, 245, 0.98), rgba(239, 246, 255, 0.98));
+      border-color: rgba(34, 197, 94, 0.22);
+      box-shadow: 0 16px 28px rgba(34, 197, 94, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .badge-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      font-size: 1.35rem;
+      background: rgba(37, 99, 235, 0.08);
+    }
+
+    .badge-card.unlocked .badge-icon {
+      background: rgba(34, 197, 94, 0.12);
+    }
+
+    .badge-card h3 {
+      margin: 12px 0 6px;
+      font-size: 1rem;
+    }
+
+    .badge-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .badge-status {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--primary-2);
+    }
+
+    .badge-card.unlocked .badge-status {
+      color: var(--success);
     }
 
     .section-head {
@@ -539,6 +743,10 @@
         grid-template-columns: 1fr;
       }
 
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+
       .summary-stats {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
@@ -561,6 +769,10 @@
       }
 
       .summary-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .mini-grid {
         grid-template-columns: 1fr;
       }
 
@@ -615,6 +827,7 @@
 
         <aside class="summary-panel">
           <h2>Overall Maths Completion</h2>
+          <p class="summary-copy" id="welcomeText">Set your student profile, daily goal, and keep your streak alive.</p>
 
           <div class="summary-stats">
             <div class="stat-card">
@@ -641,12 +854,78 @@
             </div>
           </div>
 
+          <div class="dashboard-stack">
+            <section class="dashboard-panel goal-progress-card">
+              <h3>Daily Goal and Streak</h3>
+              <div class="goal-headline">
+                <span>Today's completed topics</span>
+                <span class="goal-chip" id="goalChip">0 / 5</span>
+              </div>
+              <div class="progress-track" aria-hidden="true">
+                <div class="progress-fill" id="dailyGoalFill"></div>
+              </div>
+              <div class="mini-grid">
+                <div class="mini-stat">
+                  <span class="stat-label">Current Streak</span>
+                  <span class="stat-value" id="streakStat">0 days</span>
+                </div>
+                <div class="mini-stat">
+                  <span class="stat-label">Best Streak</span>
+                  <span class="stat-value" id="bestStreakStat">0 days</span>
+                </div>
+              </div>
+              <p class="goal-note" id="goalNote">Complete topics today to build momentum.</p>
+            </section>
+
+            <section class="dashboard-panel">
+              <h3>Student Profile</h3>
+              <div class="profile-grid">
+                <div class="field">
+                  <label for="studentNameInput">Student Name</label>
+                  <input id="studentNameInput" type="text" placeholder="Enter your name" />
+                </div>
+                <div class="field">
+                  <label for="examTargetSelect">Exam Target</label>
+                  <select id="examTargetSelect">
+                    <option value="CBSE Class 11">CBSE Class 11</option>
+                    <option value="CBSE Class 12">CBSE Class 12</option>
+                    <option value="CBSE + NDA">CBSE + NDA</option>
+                    <option value="NDA Maths Focus">NDA Maths Focus</option>
+                    <option value="Boards + NDA Revision">Boards + NDA Revision</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="dailyGoalInput">Daily Topic Goal</label>
+                  <input id="dailyGoalInput" type="number" min="1" max="50" placeholder="5" />
+                </div>
+                <button class="btn btn-secondary" id="saveProfileBtn" type="button">Save Profile</button>
+              </div>
+            </section>
+          </div>
+
           <div class="controls-row">
             <button class="btn btn-secondary" id="saveAllBtn" type="button">Save All Progress</button>
             <button class="btn btn-danger" id="resetBtn" type="button">Reset Progress</button>
           </div>
         </aside>
       </div>
+    </section>
+
+    <section class="section-grid">
+      <div class="surface-panel">
+        <h2>Study Dashboard</h2>
+        <p id="dashboardSummary">Build a steady rhythm by clearing a few topics every day and watching your syllabus completion climb.</p>
+      </div>
+      <div class="surface-panel">
+        <h2>Motivation Badges</h2>
+        <p>Badges unlock as you complete topics, finish chapters, and maintain consistency.</p>
+      </div>
+    </section>
+
+    <section class="surface-panel">
+      <h2>Unlocked Progress Badges</h2>
+      <p>These badges respond automatically to your profile, streak, chapter completion, and overall percentage.</p>
+      <div class="badge-grid" id="badgeGrid"></div>
     </section>
 
     <div class="section-head">
@@ -1156,6 +1435,53 @@
 
     const STORAGE_KEY = "maths-progress-tracker-cbse-nda-v1";
     const EXPANDED_KEY = "maths-progress-tracker-expanded-v1";
+    const PROFILE_KEY = "maths-progress-tracker-profile-v1";
+    const ACTIVITY_KEY = "maths-progress-tracker-activity-v1";
+
+    const badges = [
+      {
+        id: "first-step",
+        icon: "1",
+        title: "First Step",
+        description: "Unlock after completing your first topic.",
+        unlocked: (stats, chapters, activity) => stats.completedTopics >= 1
+      },
+      {
+        id: "goal-crusher",
+        icon: "G",
+        title: "Goal Crusher",
+        description: "Unlock when you hit your daily goal in a single day.",
+        unlocked: (stats, chapters, activity, profile) => getTodayCompleted(activity) >= profile.dailyGoal
+      },
+      {
+        id: "streak-builder",
+        icon: "S",
+        title: "Streak Builder",
+        description: "Unlock with a 3-day study streak.",
+        unlocked: (stats, chapters, activity) => activity.streak >= 3
+      },
+      {
+        id: "chapter-finisher",
+        icon: "C",
+        title: "Chapter Finisher",
+        description: "Unlock when you fully complete any chapter.",
+        unlocked: (stats, chapters) => chapters.some((chapter) => chapter.percentage === 100)
+      },
+      {
+        id: "halfway-there",
+        icon: "50",
+        title: "Halfway There",
+        description: "Unlock when your overall completion reaches 50%.",
+        unlocked: (stats) => stats.percentage >= 50
+      },
+      {
+        id: "exam-mode",
+        icon: "A+",
+        title: "Exam Mode",
+        description: "Unlock when your overall completion reaches 90%.",
+        unlocked: (stats) => stats.percentage >= 90
+      }
+    ];
 
     const chapterGrid = document.getElementById("chapterGrid");
     const overallProgressFill = document.getElementById("overallProgressFill");
@@ -1163,6 +1489,18 @@
     const totalTopicsStat = document.getElementById("totalTopicsStat");
     const completedTopicsStat = document.getElementById("completedTopicsStat");
     const chapterCountStat = document.getElementById("chapterCountStat");
+    const dailyGoalFill = document.getElementById("dailyGoalFill");
+    const goalChip = document.getElementById("goalChip");
+    const streakStat = document.getElementById("streakStat");
+    const bestStreakStat = document.getElementById("bestStreakStat");
+    const goalNote = document.getElementById("goalNote");
+    const welcomeText = document.getElementById("welcomeText");
+    const dashboardSummary = document.getElementById("dashboardSummary");
+    const studentNameInput = document.getElementById("studentNameInput");
+    const examTargetSelect = document.getElementById("examTargetSelect");
+    const dailyGoalInput = document.getElementById("dailyGoalInput");
+    const saveProfileBtn = document.getElementById("saveProfileBtn");
+    const badgeGrid = document.getElementById("badgeGrid");
     const saveAllBtn = document.getElementById("saveAllBtn");
     const resetBtn = document.getElementById("resetBtn");
     const expandAllBtn = document.getElementById("expandAllBtn");
@@ -1171,6 +1509,8 @@
 
     let progressState = loadProgress();
     let expandedState = loadExpandedState();
+    let profileState = loadProfile();
+    let activityState = loadActivity();
 
     function slugify(text) {
       return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -1204,6 +1544,116 @@
       localStorage.setItem(EXPANDED_KEY, JSON.stringify(expandedState));
     }
 
+    function loadProfile() {
+      const defaults = {
+        studentName: "",
+        examTarget: "CBSE + NDA",
+        dailyGoal: 5
+      };
+
+      try {
+        return { ...defaults, ...(JSON.parse(localStorage.getItem(PROFILE_KEY)) || {}) };
+      } catch (error) {
+        return defaults;
+      }
+    }
+
+    function saveProfile() {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(profileState));
+    }
+
+    function loadActivity() {
+      const defaults = {
+        lastActiveDate: "",
+        streak: 0,
+        bestStreak: 0,
+        dailyLog: {}
+      };
+
+      try {
+        return { ...defaults, ...(JSON.parse(localStorage.getItem(ACTIVITY_KEY)) || {}) };
+      } catch (error) {
+        return defaults;
+      }
+    }
+
+    function saveActivity() {
+      localStorage.setItem(ACTIVITY_KEY, JSON.stringify(activityState));
+    }
+
+    function getTodayString() {
+      const now = new Date();
+      const offsetDate = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+      return offsetDate.toISOString().slice(0, 10);
+    }
+
+    function getYesterdayString(dateString) {
+      const date = new Date(`${dateString}T00:00:00`);
+      date.setDate(date.getDate() - 1);
+      return date.toISOString().slice(0, 10);
+    }
+
+    function getDayDiff(previousDate, nextDate) {
+      const previous = new Date(`${previousDate}T00:00:00`);
+      const next = new Date(`${nextDate}T00:00:00`);
+      const milliseconds = next.getTime() - previous.getTime();
+      return Math.round(milliseconds / 86400000);
+    }
+
+    function getTodayCompleted(activity = activityState) {
+      return Number((activity.dailyLog && activity.dailyLog[getTodayString()]) || 0);
+    }
+
+    function ensureActivityCurrent() {
+      const today = getTodayString();
+      const yesterday = getYesterdayString(today);
+
+      if (!activityState.dailyLog) {
+        activityState.dailyLog = {};
+      }
+
+      Object.keys(activityState.dailyLog).forEach((date) => {
+        if (date !== today && date !== yesterday) {
+          delete activityState.dailyLog[date];
+        }
+      });
+
+      if (activityState.lastActiveDate && getDayDiff(activityState.lastActiveDate, today) > 1) {
+        activityState.streak = 0;
+      }
+
+      saveActivity();
+    }
+
+    function registerTopicCompletion(deltaCompleted) {
+      if (deltaCompleted <= 0) return;
+
+      const today = getTodayString();
+
+      if (!activityState.dailyLog) {
+        activityState.dailyLog = {};
+      }
+
+      activityState.dailyLog[today] = Number(activityState.dailyLog[today] || 0) + deltaCompleted;
+
+      if (!activityState.lastActiveDate) {
+        activityState.streak = 1;
+      } else {
+        const gap = getDayDiff(activityState.lastActiveDate, today);
+        if (gap === 0) {
+          activityState.streak = Math.max(activityState.streak, 1);
+        } else if (gap === 1) {
+          activityState.streak += 1;
+        } else {
+          activityState.streak = 1;
+        }
+      }
+
+      activityState.lastActiveDate = today;
+      activityState.bestStreak = Math.max(activityState.bestStreak || 0, activityState.streak || 0);
+      saveActivity();
+    }
+
     function showToast(message) {
       toast.textContent = message;
       toast.classList.add("show");
@@ -1234,16 +1684,86 @@
     function calculateOverallStats() {
       let totalTopics = 0;
       let completedTopics = 0;
+      const chapterStats = [];
 
       syllabus.forEach((chapter, index) => {
         const id = chapterId(chapter, index);
         const selections = getChapterSelections(id, chapter.topics.length);
-        totalTopics += selections.length;
-        completedTopics += selections.filter(Boolean).length;
+        const stats = calculateChapterStats(selections);
+        totalTopics += stats.total;
+        completedTopics += stats.completed;
+        chapterStats.push({
+          id,
+          title: chapter.title,
+          percentage: stats.percentage,
+          completed: stats.completed,
+          total: stats.total
+        });
       });
 
       const percentage = totalTopics === 0 ? 0 : Math.round((completedTopics / totalTopics) * 100);
-      return { totalTopics, completedTopics, percentage };
+      return { totalTopics, completedTopics, percentage, chapterStats };
+    }
+
+    function populateProfileFields() {
+      studentNameInput.value = profileState.studentName;
+      examTargetSelect.value = profileState.examTarget;
+      dailyGoalInput.value = profileState.dailyGoal;
+    }
+
+    function saveProfileFromInputs() {
+      profileState.studentName = studentNameInput.value.trim();
+      profileState.examTarget = examTargetSelect.value;
+      profileState.dailyGoal = Math.min(50, Math.max(1, Number(dailyGoalInput.value) || 5));
+      dailyGoalInput.value = profileState.dailyGoal;
+      saveProfile();
+      updateSummary();
+      renderBadges();
+      showToast("Profile saved.");
+    }
+
+    function updateDashboardText(stats) {
+      const name = profileState.studentName || "Student";
+      const completedChapters = stats.chapterStats.filter((chapter) => chapter.percentage === 100).length;
+
+      welcomeText.textContent = `${name} is targeting ${profileState.examTarget} with a daily goal of ${profileState.dailyGoal} topic${profileState.dailyGoal === 1 ? "" : "s"}.`;
+      dashboardSummary.textContent = `${name}, you have completed ${stats.completedTopics} of ${stats.totalTopics} topics, finished ${completedChapters} chapter${completedChapters === 1 ? "" : "s"}, and you are currently focused on ${profileState.examTarget}.`;
+    }
+
+    function updateGoalPanel() {
+      ensureActivityCurrent();
+
+      const todayCompleted = getTodayCompleted();
+      const goal = profileState.dailyGoal;
+      const goalPercent = Math.min(100, Math.round((todayCompleted / goal) * 100));
+
+      goalChip.textContent = `${todayCompleted} / ${goal}`;
+      dailyGoalFill.style.width = `${goalPercent}%`;
+      streakStat.textContent = `${activityState.streak} day${activityState.streak === 1 ? "" : "s"}`;
+      bestStreakStat.textContent = `${activityState.bestStreak} day${activityState.bestStreak === 1 ? "" : "s"}`;
+
+      if (todayCompleted >= goal) {
+        goalNote.textContent = "Daily goal achieved. Keep the streak alive with one more study session tomorrow.";
+      } else {
+        const remaining = Math.max(0, goal - todayCompleted);
+        goalNote.textContent = `${remaining} more topic${remaining === 1 ? "" : "s"} to hit today's goal.`;
+      }
+    }
+
+    function renderBadges() {
+      const stats = calculateOverallStats();
+
+      badgeGrid.innerHTML = badges.map((badge) => {
+        const unlocked = badge.unlocked(stats, stats.chapterStats, activityState, profileState);
+        return `
+          <article class="badge-card${unlocked ? " unlocked" : ""}">
+            <div class="badge-icon">${badge.icon}</div>
+            <h3>${badge.title}</h3>
+            <p>${badge.description}</p>
+            <span class="badge-status">${unlocked ? "Unlocked" : "Locked"}</span>
+          </article>
+        `;
+      }).join("");
     }
 
     function updateSummary() {
@@ -1254,6 +1774,9 @@
       overallProgressLabel.textContent = `${stats.percentage}%`;
       overallProgressFill.style.width = `${stats.percentage}%`;
       overallProgressFill.style.filter = stats.percentage === 100 ? "saturate(1.15)" : "none";
+      updateGoalPanel();
+      updateDashboardText(stats);
+      renderBadges();
     }
 
     function flashSaveStatus(element, message) {
@@ -1352,20 +1875,26 @@
 
       topicList.addEventListener("change", (event) => {
         if (event.target.matches('input[type="checkbox"]')) {
+          const previousSelections = getChapterSelections(id, chapter.topics.length);
           const selections = [...topicList.querySelectorAll('input[type="checkbox"]')].map((input) => input.checked);
+          const previousCompleted = previousSelections.filter(Boolean).length;
+          const newCompleted = selections.filter(Boolean).length;
           setChapterSelections(id, selections);
           syncChapterCard(card, chapter, id, selections);
+          registerTopicCompletion(Math.max(0, newCompleted - previousCompleted));
           updateSummary();
         }
       });
 
       markAllBtn.addEventListener("click", () => {
+        const previousSelections = getChapterSelections(id, chapter.topics.length);
         const selections = chapter.topics.map(() => true);
         setChapterSelections(id, selections);
         topicList.querySelectorAll('input[type="checkbox"]').forEach((input) => {
           input.checked = true;
         });
         syncChapterCard(card, chapter, id, selections);
+        registerTopicCompletion(selections.length - previousSelections.filter(Boolean).length);
         updateSummary();
         flashSaveStatus(saveStatus, "All topics marked complete.");
         showToast(`${chapter.title} completed.`);
@@ -1422,15 +1951,28 @@
 
     saveAllBtn.addEventListener("click", () => {
       saveProgress();
+      saveProfile();
+      saveActivity();
       showToast("All progress saved successfully.");
     });
 
+    saveProfileBtn.addEventListener("click", () => {
+      saveProfileFromInputs();
+    });
+
     resetBtn.addEventListener("click", () => {
-      const shouldReset = window.confirm("Reset all saved progress for every chapter?");
+      const shouldReset = window.confirm("Reset all saved progress, streak data, and badge activity?");
       if (!shouldReset) return;
 
       progressState = {};
+      activityState = {
+        lastActiveDate: "",
+        streak: 0,
+        bestStreak: 0,
+        dailyLog: {}
+      };
       saveProgress();
+      saveActivity();
       renderChapters();
       showToast("Progress reset.");
     });
@@ -1443,6 +1985,8 @@
       setAllExpanded(false);
     });
 
+    populateProfileFields();
+    ensureActivityCurrent();
     renderChapters();
   </script>
 </body>
