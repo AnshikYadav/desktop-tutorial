@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maths Progress Tracker | Class 11, 12 & NDA</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-strong: #ffffff;
+      --text: #14213d;
+      --muted: #5f6f8f;
+      --line: rgba(26, 52, 96, 0.12);
+      --shadow: 0 18px 50px rgba(31, 61, 124, 0.14);
+      --primary: #0ea5e9;
+      --primary-2: #2563eb;
+      --accent: #f97316;
+      --success: #16a34a;
+      --success-soft: rgba(22, 163, 74, 0.14);
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --card-radius: 22px;
+      --bar-radius: 999px;
+      --transition: 260ms ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI Variable", "Aptos", "Trebuchet MS", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(249, 115, 22, 0.16), transparent 24%),
+        linear-gradient(135deg, #f7fbff 0%, #eef4ff 52%, #fef6ed 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.42) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.42) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .app-shell {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(245, 249, 255, 0.86)),
+        linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(249, 115, 22, 0.08));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -80px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.24), transparent 66%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(14, 165, 233, 0.09);
+      color: var(--primary-2);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    .summary-panel {
+      display: grid;
+      gap: 14px;
+      padding: 22px;
+      border-radius: 24px;
+      background: linear-gradient(160deg, rgba(20, 33, 61, 0.96), rgba(37, 99, 235, 0.94));
+      color: #fff;
+      box-shadow: 0 18px 40px rgba(17, 24, 39, 0.24);
+    }
+
+    .summary-panel h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat-card {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .stat-value {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .progress-block {
+      display: grid;
+      gap: 10px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      font-size: 0.96rem;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 14px;
+      overflow: hidden;
+      border-radius: var(--bar-radius);
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      border-radius: var(--bar-radius);
+      background: linear-gradient(90deg, #22d3ee 0%, #f59e0b 100%);
+      transition: width 360ms ease, filter 260ms ease;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 14px;
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 12px 26px rgba(37, 99, 235, 0.24);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(20, 33, 61, 0.1);
+    }
+
+    .btn-danger {
+      color: #fff;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      box-shadow: 0 12px 24px rgba(239, 68, 68, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin: 32px 0 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 2vw, 2rem);
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 18px;
+    }
+
+    .chapter-card {
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: var(--card-radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 48px rgba(30, 58, 138, 0.18);
+      border-color: rgba(37, 99, 235, 0.22);
+    }
+
+    .chapter-card.completed {
+      border-color: rgba(22, 163, 74, 0.32);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(240, 253, 244, 0.92));
+    }
+
+    .chapter-card.completed .chapter-badge {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .chapter-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 22px 22px 18px;
+    }
+
+    .chapter-index {
+      flex: 0 0 auto;
+      display: inline-grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      color: #fff;
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.9), rgba(37, 99, 235, 0.9));
+      font-weight: 800;
+    }
+
+    .chapter-meta {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .chapter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.08);
+      color: var(--primary-2);
+      font-size: 0.79rem;
+      font-weight: 700;
+    }
+
+    .chapter-title {
+      margin: 12px 0 6px;
+      font-size: 1.12rem;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .chapter-subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .chapter-toggle {
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      color: var(--primary-2);
+      background: rgba(37, 99, 235, 0.08);
+      border: 1px solid rgba(37, 99, 235, 0.1);
+    }
+
+    .chapter-toggle:hover {
+      background: rgba(37, 99, 235, 0.16);
+    }
+
+    .chapter-toggle .arrow {
+      display: inline-block;
+      font-size: 1.1rem;
+      transition: transform var(--transition);
+    }
+
+    .chapter-card.expanded .chapter-toggle .arrow {
+      transform: rotate(180deg);
+    }
+
+    .chapter-progress {
+      padding: 0 22px 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .chapter-progress-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .chapter-track {
+      width: 100%;
+      height: 11px;
+      border-radius: var(--bar-radius);
+      overflow: hidden;
+      background: rgba(37, 99, 235, 0.09);
+    }
+
+    .chapter-fill {
+      width: 0;
+      height: 100%;
+      border-radius: var(--bar-radius);
+      background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+      transition: width 360ms ease, background 260ms ease;
+    }
+
+    .chapter-card.completed .chapter-fill {
+      background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+    }
+
+    .chapter-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 300ms ease;
+    }
+
+    .chapter-card.expanded .chapter-body {
+      grid-template-rows: 1fr;
+    }
+
+    .chapter-body-inner {
+      overflow: hidden;
+      border-top: 1px solid var(--line);
+    }
+
+    .topic-list {
+      list-style: none;
+      margin: 0;
+      padding: 16px 18px 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .topic-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(20, 33, 61, 0.07);
+      transition: background var(--transition), border-color var(--transition), transform var(--transition);
+    }
+
+    .topic-item:hover {
+      transform: translateX(3px);
+      border-color: rgba(14, 165, 233, 0.22);
+      background: rgba(240, 249, 255, 0.9);
+    }
+
+    .topic-item.completed {
+      background: rgba(240, 253, 244, 0.94);
+      border-color: rgba(34, 197, 94, 0.16);
+    }
+
+    .topic-item input[type="checkbox"] {
+      margin: 0;
+      flex: 0 0 auto;
+      width: 20px;
+      height: 20px;
+      accent-color: var(--primary-2);
+      cursor: pointer;
+    }
+
+    .topic-label {
+      flex: 1;
+      min-width: 0;
+      font-size: 0.96rem;
+      line-height: 1.45;
+      cursor: pointer;
+    }
+
+    .topic-item.completed .topic-label {
+      color: #1f5130;
+      font-weight: 600;
+    }
+
+    .chapter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 18px;
+    }
+
+    .chapter-actions .btn {
+      flex: 1 1 150px;
+      min-height: 42px;
+      border-radius: 12px;
+      font-size: 0.93rem;
+    }
+
+    .chapter-save-status {
+      min-height: 24px;
+      padding: 0 18px 18px;
+      color: var(--success);
+      font-size: 0.88rem;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .chapter-save-status.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 10;
+      min-width: min(320px, calc(100vw - 32px));
+      padding: 14px 18px;
+      border-radius: 16px;
+      color: #fff;
+      background: rgba(20, 33, 61, 0.95);
+      box-shadow: 0 18px 38px rgba(20, 33, 61, 0.24);
+      opacity: 0;
+      transform: translateY(18px);
+      pointer-events: none;
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .app-shell {
+        width: min(100% - 20px, 1240px);
+        padding-top: 20px;
+      }
+
+      .hero,
+      .summary-panel,
+      .chapter-card {
+        border-radius: 20px;
+      }
+
+      .hero {
+        padding: 22px;
+      }
+
+      .summary-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chapter-top {
+        padding: 18px 18px 16px;
+      }
+
+      .chapter-progress,
+      .chapter-actions,
+      .chapter-save-status {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .topic-list {
+        padding: 14px 14px 0;
+      }
+
+      .controls-row,
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .chapter-actions .btn,
+      .controls-row .btn,
+      .hero-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Maths Syllabus Tracker</span>
+          <h1>Track Class 11, Class 12 and NDA Maths with one clean dashboard.</h1>
+          <p>
+            Monitor every chapter, save your progress, expand topics when you need detail, and watch both chapter-wise and overall completion update smoothly in real time.
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary" id="expandAllBtn" type="button">Expand All Chapters</button>
+            <button class="btn btn-secondary" id="collapseAllBtn" type="button">Collapse All Chapters</button>
+          </div>
+        </div>
+
+        <aside class="summary-panel">
+          <h2>Overall Maths Completion</h2>
+
+          <div class="summary-stats">
+            <div class="stat-card">
+              <span class="stat-label">Total Topics</span>
+              <span class="stat-value" id="totalTopicsStat">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Completed</span>
+              <span class="stat-value" id="completedTopicsStat">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Chapters</span>
+              <span class="stat-value" id="chapterCountStat">0</span>
+            </div>
+          </div>
+
+          <div class="progress-block">
+            <div class="progress-meta">
+              <strong>Overall Progress</strong>
+              <strong id="overallProgressLabel">0%</strong>
+            </div>
+            <div class="progress-track" aria-hidden="true">
+              <div class="progress-fill" id="overallProgressFill"></div>
+            </div>
+          </div>
+
+          <div class="controls-row">
+            <button class="btn btn-secondary" id="saveAllBtn" type="button">Save All Progress</button>
+            <button class="btn btn-danger" id="resetBtn" type="button">Reset Progress</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="section-head">
+      <div>
+        <h2>Complete Maths Syllabus</h2>
+        <p>CBSE Class 11, CBSE Class 12, and NDA-oriented revision topics, all in one responsive tracker.</p>
+      </div>
+    </div>
+
+    <main class="chapter-grid" id="chapterGrid"></main>
+
+    <p class="footer-note">Your progress is saved locally in this browser using localStorage.</p>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // Complete syllabus data for Class 11, Class 12 and NDA-oriented maths preparation.
+    const syllabus = [
+      {
+        category: "Class 11",
+        title: "Sets",
+        subtitle: "Foundations of set language and notation used throughout higher maths.",
+        topics: [
+          "Introduction to sets and roster/set-builder form",
+          "Types of sets: finite, infinite, equal, equivalent and null sets",
+          "Subsets and supersets",
+          "Power set",
+          "Universal set and Venn diagrams",
+          "Union of sets",
+          "Intersection of sets",
+          "Difference of sets and complement",
+          "Practical problems using set operations"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Relations and Functions",
+        subtitle: "Mapping rules, domains and ranges for algebraic thinking.",
+        topics: [
+          "Ordered pairs and Cartesian product",
+          "Definition of relation",
+          "Types of relations",
+          "Domain, codomain and range",
+          "Definition of function",
+          "Types of functions: one-one, many-one, onto and into",
+          "Composition of functions",
+          "Invertible functions and inverse",
+          "Real-life interpretation of functional relationships"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Trigonometric Functions",
+        subtitle: "Angle measures, identities and graphs essential for CBSE and NDA.",
+        topics: [
+          "Angle measure in degree and radian",
+          "Positive and negative angles",
+          "Trigonometric ratios and unit circle idea",
+          "Signs of trigonometric functions in quadrants",
+          "Trigonometric functions of allied angles",
+          "Domain and range of trigonometric functions",
+          "Graphs of sin x, cos x and tan x",
+          "Graphs of cosec x, sec x and cot x",
+          "Fundamental identities",
+          "General solutions of trigonometric equations"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Principle of Mathematical Induction",
+        subtitle: "Proof technique for statements involving natural numbers.",
+        topics: [
+          "Concept of mathematical induction",
+          "Base case verification",
+          "Induction hypothesis",
+          "Induction step",
+          "Applications to summation formulas",
+          "Applications to divisibility results"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Complex Numbers and Quadratic Equations",
+        subtitle: "Imaginary unit, algebra of complex numbers and roots of quadratics.",
+        topics: [
+          "Need for complex numbers",
+          "Imaginary unit and iota properties",
+          "Complex numbers in a + ib form",
+          "Equality of complex numbers",
+          "Addition, subtraction and multiplication",
+          "Conjugate of a complex number",
+          "Modulus and Argand plane basics",
+          "Quadratic equations and nature of roots",
+          "Solution of quadratic equations by factorisation and formula",
+          "Relation between roots and coefficients"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Linear Inequalities",
+        subtitle: "Solution methods for inequalities in one and two variables.",
+        topics: [
+          "Algebraic inequalities and sign rules",
+          "Linear inequalities in one variable",
+          "Graphical representation on number line",
+          "Linear inequalities in two variables",
+          "Graphical solution in Cartesian plane",
+          "Practical word problems based on inequalities"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Permutations and Combinations",
+        subtitle: "Counting techniques widely used in probability and NDA questions.",
+        topics: [
+          "Fundamental principle of counting",
+          "Factorial notation",
+          "Permutations when all objects are distinct",
+          "Permutations with repetition",
+          "Circular permutations",
+          "Combinations and selection problems",
+          "Relations between permutations and combinations",
+          "Applications in arrangement and selection questions"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Binomial Theorem",
+        subtitle: "Expansion patterns, general term and coefficient-based problems.",
+        topics: [
+          "Statement of binomial theorem for positive integers",
+          "Binomial expansion",
+          "General term in expansion",
+          "Middle term(s) in a binomial expansion",
+          "Properties of binomial coefficients",
+          "Simple applications and coefficient comparison"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Sequences and Series",
+        subtitle: "Patterns, arithmetic progression and geometric progression.",
+        topics: [
+          "Sequence and series basics",
+          "Arithmetic progression and nth term",
+          "Sum of first n terms of AP",
+          "Arithmetic mean",
+          "Geometric progression and nth term",
+          "Sum of finite GP",
+          "Infinite GP and sum to infinity",
+          "Geometric mean",
+          "Relationship between AM and GM",
+          "Special series and sigma notation"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Straight Lines",
+        subtitle: "Coordinate geometry of slope, intercepts and line equations.",
+        topics: [
+          "Slope of a line",
+          "Angle between two lines",
+          "Various forms of equation of a line",
+          "Point-slope form",
+          "Two-point form",
+          "Slope-intercept form",
+          "Intercept form",
+          "Normal form",
+          "Distance of a point from a line",
+          "Family of lines and applications"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Conic Sections",
+        subtitle: "Circle, parabola, ellipse and hyperbola from sectioning a cone.",
+        topics: [
+          "Sections of a cone and basic definitions",
+          "Circle and standard equation",
+          "Parabola and its standard form",
+          "Latus rectum and focal properties of parabola",
+          "Ellipse and standard equation",
+          "Major axis, minor axis and eccentricity of ellipse",
+          "Hyperbola and standard equation",
+          "Asymptotes and focal properties of hyperbola",
+          "Identification of conics from equations"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Introduction to Three Dimensional Geometry",
+        subtitle: "3D coordinates and distance relations in space.",
+        topics: [
+          "Coordinate axes and coordinate planes in space",
+          "Coordinates of a point in three dimensions",
+          "Distance formula in 3D",
+          "Section formula in 3D",
+          "Simple geometric interpretation of points in space"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Limits and Derivatives",
+        subtitle: "Entry point to calculus through limits and instantaneous rate of change.",
+        topics: [
+          "Intuitive idea of limits",
+          "Limit of polynomial and rational functions",
+          "Standard limits",
+          "Introduction to derivative",
+          "Derivative as rate of change",
+          "Derivative as slope of tangent",
+          "Derivatives of polynomial and trigonometric functions",
+          "Simple problems using derivatives"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Statistics",
+        subtitle: "Data representation and measures of central tendency.",
+        topics: [
+          "Presentation of data",
+          "Frequency distribution",
+          "Histogram and frequency polygon",
+          "Measures of central tendency",
+          "Mean of grouped and ungrouped data",
+          "Median of grouped and ungrouped data",
+          "Mode of grouped and ungrouped data",
+          "Comparison of data sets using averages"
+        ]
+      },
+      {
+        category: "Class 11",
+        title: "Probability",
+        subtitle: "Basic probability theory for equally likely outcomes.",
+        topics: [
+          "Random experiment and sample space",
+          "Events and types of events",
+          "Equally likely outcomes",
+          "Probability of an event",
+          "Complementary events",
+          "Simple problems using classical probability"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Relations and Functions",
+        subtitle: "Advanced function concepts and binary operations.",
+        topics: [
+          "Types of relations revisited",
+          "Equivalence relations",
+          "One-one and onto functions",
+          "Bijective functions",
+          "Inverse of a function",
+          "Composition of functions",
+          "Binary operations and examples"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Inverse Trigonometric Functions",
+        subtitle: "Principal values, domains and standard transformations.",
+        topics: [
+          "Definition of inverse trigonometric functions",
+          "Principal value branches",
+          "Domain and range",
+          "Graphs of inverse trigonometric functions",
+          "Basic identities involving inverse trigonometric functions",
+          "Transformation and simplification problems"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Matrices",
+        subtitle: "Matrix algebra and properties used in systems and transformations.",
+        topics: [
+          "Definition and order of a matrix",
+          "Types of matrices",
+          "Equality of matrices",
+          "Addition and scalar multiplication",
+          "Matrix multiplication",
+          "Transpose of a matrix",
+          "Symmetric and skew-symmetric matrices",
+          "Elementary matrix operations"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Determinants",
+        subtitle: "Expansion methods and applications to solving equations.",
+        topics: [
+          "Determinants of order 2 and 3",
+          "Properties of determinants",
+          "Minors and cofactors",
+          "Expansion using cofactors",
+          "Area of triangle using determinants",
+          "Singular and non-singular matrices",
+          "Adjoint and inverse of a matrix",
+          "Applications in solving linear equations"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Continuity and Differentiability",
+        subtitle: "Rigorous ideas of continuity and derivative rules.",
+        topics: [
+          "Continuity of functions",
+          "Differentiability of functions",
+          "Derivatives of composite functions",
+          "Chain rule",
+          "Derivative of implicit functions",
+          "Logarithmic differentiation",
+          "Derivatives of inverse trigonometric functions",
+          "Second order derivatives",
+          "Rolle's theorem and Lagrange's mean value theorem"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Applications of Derivatives",
+        subtitle: "Using derivatives for monotonicity, tangents and optimization.",
+        topics: [
+          "Rate of change in practical situations",
+          "Increasing and decreasing functions",
+          "Maxima and minima",
+          "Tangents and normals",
+          "Approximation using differentials",
+          "Optimization problems"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Integrals",
+        subtitle: "Indefinite integration methods and standard formulae.",
+        topics: [
+          "Integration as inverse process of differentiation",
+          "Basic integration formulas",
+          "Methods of substitution",
+          "Integration by parts",
+          "Integration using partial fractions",
+          "Integrals of trigonometric functions",
+          "Integrals of inverse trigonometric type expressions"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Applications of Integrals",
+        subtitle: "Area problems based on definite integration concepts.",
+        topics: [
+          "Area under simple curves",
+          "Area between two curves",
+          "Area bounded by line and curve",
+          "Properties of area symmetry in integration"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Differential Equations",
+        subtitle: "Forming and solving first-order differential equations.",
+        topics: [
+          "Definition and order of differential equation",
+          "General and particular solutions",
+          "Formation of differential equations",
+          "Solution by separation of variables",
+          "Homogeneous differential equations",
+          "Linear differential equations of first order",
+          "Applications in simple growth and decay models"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Vector Algebra",
+        subtitle: "Vectors, direction cosines and product operations.",
+        topics: [
+          "Vectors and scalars",
+          "Magnitude and direction of a vector",
+          "Types of vectors",
+          "Addition of vectors",
+          "Multiplication of a vector by scalar",
+          "Position vector of a point",
+          "Section formula in vector form",
+          "Dot product of vectors",
+          "Projection of a vector",
+          "Cross product of vectors"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Three Dimensional Geometry",
+        subtitle: "Lines and planes in space with vector-based equations.",
+        topics: [
+          "Direction cosines and direction ratios",
+          "Equation of a line in space",
+          "Angle between two lines",
+          "Shortest distance between two lines",
+          "Equation of a plane",
+          "Angle between line and plane",
+          "Angle between two planes",
+          "Distance of point from a plane"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Linear Programming",
+        subtitle: "Optimization under constraints with graphical solutions.",
+        topics: [
+          "Introduction to linear programming",
+          "Objective function and constraints",
+          "Feasible region",
+          "Corner point method",
+          "Optimization in real-life problems"
+        ]
+      },
+      {
+        category: "Class 12",
+        title: "Probability",
+        subtitle: "Conditional probability, Bayes' theorem and distributions.",
+        topics: [
+          "Conditional probability",
+          "Multiplication theorem on probability",
+          "Independent events",
+          "Total probability theorem",
+          "Bayes' theorem",
+          "Random variables",
+          "Probability distribution of a random variable",
+          "Mean and variance of random variables",
+          "Binomial distribution"
+        ]
+      },
+      {
+        category: "NDA Level",
+        title: "NDA Algebra and Number Skills",
+        subtitle: "High-frequency NDA building blocks beyond direct CBSE chapter boundaries.",
+        topics: [
+          "Real numbers and properties",
+          "Indices, surds and logarithms",
+          "HCF and LCM",
+          "Remainder theorem basics",
+          "Theory of equations",
+          "Progressions revision",
+          "Binomial expansion revision",
+          "Modulus and inequalities",
+          "Partial fractions and algebraic identities"
+        ]
+      },
+      {
+        category: "NDA Level",
+        title: "NDA Trigonometry and Heights-Distances",
+        subtitle: "Speed-focused trigonometry for NDA problem solving.",
+        topics: [
+          "Standard trigonometric ratios",
+          "Complementary and supplementary angle relations",
+          "Trigonometric identities and transformations",
+          "Trigonometric equations",
+          "Properties of triangles",
+          "Sine rule and cosine rule",
+          "Heights and distances",
+          "Small-angle and practical approximation ideas"
+        ]
+      },
+      {
+        category: "NDA Level",
+        title: "NDA Coordinate Geometry",
+        subtitle: "Fast problem solving in 2D coordinate geometry.",
+        topics: [
+          "Distance and section formula revision",
+          "Straight line revision",
+          "Pair of straight lines basics",
+          "Circle problems",
+          "Parabola problems",
+          "Ellipse revision",
+          "Hyperbola revision",
+          "Combined geometry mixed questions"
+        ]
+      },
+      {
+        category: "NDA Level",
+        title: "NDA Calculus and Analytical Applications",
+        subtitle: "Revision set for differentiation, integration and maxima-minima style questions.",
+        topics: [
+          "Function analysis and graphs",
+          "Limits revision",
+          "Differentiation revision",
+          "Applications of derivatives revision",
+          "Indefinite integration revision",
+          "Definite integrals basics",
+          "Area and applied integral questions",
+          "Differential equation revision"
+        ]
+      },
+      {
+        category: "NDA Level",
+        title: "NDA Vector, 3D and Probability Revision",
+        subtitle: "Exam-oriented mixed practice from advanced topics.",
+        topics: [
+          "Vector algebra revision",
+          "3D line and plane revision",
+          "Matrices and determinants recap",
+          "Set theory quick revision",
+          "Permutation and combination recap",
+          "Probability mixed questions",
+          "Statistics and averages recap",
+          "Previous-year style mixed maths set"
+        ]
+      }
+    ];
+
+    const STORAGE_KEY = "maths-progress-tracker-cbse-nda-v1";
+    const EXPANDED_KEY = "maths-progress-tracker-expanded-v1";
+
+    const chapterGrid = document.getElementById("chapterGrid");
+    const overallProgressFill = document.getElementById("overallProgressFill");
+    const overallProgressLabel = document.getElementById("overallProgressLabel");
+    const totalTopicsStat = document.getElementById("totalTopicsStat");
+    const completedTopicsStat = document.getElementById("completedTopicsStat");
+    const chapterCountStat = document.getElementById("chapterCountStat");
+    const saveAllBtn = document.getElementById("saveAllBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const expandAllBtn = document.getElementById("expandAllBtn");
+    const collapseAllBtn = document.getElementById("collapseAllBtn");
+    const toast = document.getElementById("toast");
+
+    let progressState = loadProgress();
+    let expandedState = loadExpandedState();
+
+    function slugify(text) {
+      return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    }
+
+    function chapterId(chapter, index) {
+      return `${chapter.category}-${slugify(chapter.title)}-${index}`;
+    }
+
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function saveProgress() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progressState));
+    }
+
+    function loadExpandedState() {
+      try {
+        return JSON.parse(localStorage.getItem(EXPANDED_KEY)) || {};
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function saveExpandedState() {
+      localStorage.setItem(EXPANDED_KEY, JSON.stringify(expandedState));
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1800);
+    }
+
+    function getChapterSelections(id, topicsLength) {
+      const saved = progressState[id];
+      const normalized = Array.from({ length: topicsLength }, (_, index) => Boolean(saved && saved[index]));
+      return normalized;
+    }
+
+    function setChapterSelections(id, selections) {
+      progressState[id] = selections;
+      saveProgress();
+    }
+
+    function calculateChapterStats(selections) {
+      const total = selections.length;
+      const completed = selections.filter(Boolean).length;
+      const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
+      return { total, completed, percentage };
+    }
+
+    function calculateOverallStats() {
+      let totalTopics = 0;
+      let completedTopics = 0;
+
+      syllabus.forEach((chapter, index) => {
+        const id = chapterId(chapter, index);
+        const selections = getChapterSelections(id, chapter.topics.length);
+        totalTopics += selections.length;
+        completedTopics += selections.filter(Boolean).length;
+      });
+
+      const percentage = totalTopics === 0 ? 0 : Math.round((completedTopics / totalTopics) * 100);
+      return { totalTopics, completedTopics, percentage };
+    }
+
+    function updateSummary() {
+      const stats = calculateOverallStats();
+      totalTopicsStat.textContent = String(stats.totalTopics);
+      completedTopicsStat.textContent = String(stats.completedTopics);
+      chapterCountStat.textContent = String(syllabus.length);
+      overallProgressLabel.textContent = `${stats.percentage}%`;
+      overallProgressFill.style.width = `${stats.percentage}%`;
+      overallProgressFill.style.filter = stats.percentage === 100 ? "saturate(1.15)" : "none";
+    }
+
+    function flashSaveStatus(element, message) {
+      element.textContent = message;
+      element.classList.add("show");
+      clearTimeout(element.timer);
+      element.timer = setTimeout(() => {
+        element.classList.remove("show");
+      }, 1500);
+    }
+
+    function renderChapters() {
+      chapterGrid.innerHTML = "";
+
+      syllabus.forEach((chapter, index) => {
+        const id = chapterId(chapter, index);
+        const selections = getChapterSelections(id, chapter.topics.length);
+        const stats = calculateChapterStats(selections);
+        const expanded = expandedState[id] ?? index < 2;
+
+        const card = document.createElement("article");
+        card.className = `chapter-card${expanded ? " expanded" : ""}${stats.percentage === 100 ? " completed" : ""}`;
+        card.dataset.chapterId = id;
+
+        const topicsHtml = chapter.topics.map((topic, topicIndex) => {
+          const inputId = `${id}-topic-${topicIndex}`;
+          const checked = selections[topicIndex] ? "checked" : "";
+          const completedClass = selections[topicIndex] ? " completed" : "";
+
+          return `
+            <li class="topic-item${completedClass}">
+              <input type="checkbox" id="${inputId}" data-topic-index="${topicIndex}" ${checked} />
+              <label class="topic-label" for="${inputId}">${topic}</label>
+            </li>
+          `;
+        }).join("");
+
+        card.innerHTML = `
+          <div class="chapter-top">
+            <div class="chapter-index">${index + 1}</div>
+            <div class="chapter-meta">
+              <span class="chapter-badge">${stats.percentage === 100 ? "✔ Completed" : chapter.category}</span>
+              <h3 class="chapter-title">${chapter.title}</h3>
+              <p class="chapter-subtitle">${chapter.subtitle}</p>
+            </div>
+            <button class="chapter-toggle" type="button" aria-label="Toggle chapter">
+              <span class="arrow">▾</span>
+            </button>
+          </div>
+
+          <div class="chapter-progress">
+            <div class="chapter-progress-line">
+              <span>${stats.completed}/${stats.total} topics completed</span>
+              <strong class="chapter-percent">${stats.percentage}%</strong>
+            </div>
+            <div class="chapter-track" aria-hidden="true">
+              <div class="chapter-fill" style="width: ${stats.percentage}%"></div>
+            </div>
+          </div>
+
+          <div class="chapter-body">
+            <div class="chapter-body-inner">
+              <ul class="topic-list">
+                ${topicsHtml}
+              </ul>
+
+              <div class="chapter-actions">
+                <button class="btn btn-secondary mark-all-btn" type="button">Mark All as Complete</button>
+                <button class="btn btn-primary save-btn" type="button">Save Progress</button>
+              </div>
+              <div class="chapter-save-status" aria-live="polite"></div>
+            </div>
+          </div>
+        `;
+
+        bindChapterEvents(card, chapter, index);
+        chapterGrid.appendChild(card);
+      });
+
+      updateSummary();
+    }
+
+    function bindChapterEvents(card, chapter, index) {
+      const id = chapterId(chapter, index);
+      const toggleBtn = card.querySelector(".chapter-toggle");
+      const markAllBtn = card.querySelector(".mark-all-btn");
+      const saveBtn = card.querySelector(".save-btn");
+      const saveStatus = card.querySelector(".chapter-save-status");
+      const topicList = card.querySelector(".topic-list");
+
+      toggleBtn.addEventListener("click", () => {
+        const isExpanded = card.classList.toggle("expanded");
+        expandedState[id] = isExpanded;
+        saveExpandedState();
+      });
+
+      topicList.addEventListener("change", (event) => {
+        if (event.target.matches('input[type="checkbox"]')) {
+          const selections = [...topicList.querySelectorAll('input[type="checkbox"]')].map((input) => input.checked);
+          setChapterSelections(id, selections);
+          syncChapterCard(card, chapter, id, selections);
+          updateSummary();
+        }
+      });
+
+      markAllBtn.addEventListener("click", () => {
+        const selections = chapter.topics.map(() => true);
+        setChapterSelections(id, selections);
+        topicList.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+          input.checked = true;
+        });
+        syncChapterCard(card, chapter, id, selections);
+        updateSummary();
+        flashSaveStatus(saveStatus, "All topics marked complete.");
+        showToast(`${chapter.title} completed.`);
+      });
+
+      saveBtn.addEventListener("click", () => {
+        const selections = [...topicList.querySelectorAll('input[type="checkbox"]')].map((input) => input.checked);
+        setChapterSelections(id, selections);
+        syncChapterCard(card, chapter, id, selections);
+        updateSummary();
+        flashSaveStatus(saveStatus, "Progress saved for this chapter.");
+        showToast(`Saved progress for ${chapter.title}.`);
+      });
+    }
+
+    function syncChapterCard(card, chapter, id, selections) {
+      const stats = calculateChapterStats(selections);
+      const percentageText = card.querySelector(".chapter-percent");
+      const progressLine = card.querySelector(".chapter-progress-line span");
+      const fill = card.querySelector(".chapter-fill");
+      const badge = card.querySelector(".chapter-badge");
+      const topicItems = card.querySelectorAll(".topic-item");
+
+      progressLine.textContent = `${stats.completed}/${stats.total} topics completed`;
+      percentageText.textContent = `${stats.percentage}%`;
+      fill.style.width = `${stats.percentage}%`;
+
+      topicItems.forEach((item, index) => {
+        item.classList.toggle("completed", selections[index]);
+      });
+
+      if (stats.percentage === 100) {
+        card.classList.add("completed");
+        badge.textContent = "✔ Completed";
+      } else {
+        card.classList.remove("completed");
+        badge.textContent = chapter.category;
+      }
+
+      progressState[id] = selections;
+      saveProgress();
+    }
+
+    function setAllExpanded(expanded) {
+      syllabus.forEach((chapter, index) => {
+        const id = chapterId(chapter, index);
+        expandedState[id] = expanded;
+      });
+      saveExpandedState();
+      document.querySelectorAll(".chapter-card").forEach((card) => {
+        card.classList.toggle("expanded", expanded);
+      });
+    }
+
+    saveAllBtn.addEventListener("click", () => {
+      saveProgress();
+      showToast("All progress saved successfully.");
+    });
+
+    resetBtn.addEventListener("click", () => {
+      const shouldReset = window.confirm("Reset all saved progress for every chapter?");
+      if (!shouldReset) return;
+
+      progressState = {};
+      saveProgress();
+      renderChapters();
+      showToast("Progress reset.");
+    });
+
+    expandAllBtn.addEventListener("click", () => {
+      setAllExpanded(true);
+    });
+
+    collapseAllBtn.addEventListener("click", () => {
+      setAllExpanded(false);
+    });
+
+    renderChapters();
+  </script>
+</body>
+</html>
