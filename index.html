@@ -138,6 +138,52 @@
       font-weight: 700;
     }
 
+    .hero-flow {
+      display: grid;
+      gap: 18px;
+    }
+
+    .flow-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .flow-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.08);
+      border: 1px solid rgba(37, 99, 235, 0.12);
+      color: var(--primary-2);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .hero-quickstats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .quickstat {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(20, 33, 61, 0.08);
+      box-shadow: 0 12px 26px rgba(30, 58, 138, 0.08);
+    }
+
+    .quickstat strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.2rem;
+    }
+
     .summary-copy {
       margin: -2px 0 2px;
       color: rgba(255, 255, 255, 0.76);
@@ -449,6 +495,51 @@
 
     .badge-card.unlocked .badge-status {
       color: var(--success);
+    }
+
+    .stack-section {
+      margin-top: 18px;
+    }
+
+    .study-hub {
+      display: grid;
+      gap: 18px;
+    }
+
+    .hub-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hub-tab {
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(20, 33, 61, 0.1);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .hub-tab.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+    }
+
+    .hub-panel {
+      display: none;
+    }
+
+    .hub-panel.active {
+      display: block;
+    }
+
+    .hub-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 1.1fr 1fr;
     }
 
     .course-switcher {
@@ -830,6 +921,11 @@
         grid-template-columns: 1fr;
       }
 
+      .hub-grid,
+      .hero-quickstats {
+        grid-template-columns: 1fr 1fr;
+      }
+
       .summary-stats {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
@@ -856,6 +952,11 @@
       }
 
       .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-quickstats,
+      .hub-grid {
         grid-template-columns: 1fr;
       }
 
@@ -2732,6 +2833,130 @@
           "Biotechnology in medicine",
           "Biotechnology in agriculture"
         ]
+      },
+      {
+        category: "CDS Level",
+        subject: "mathematics",
+        title: "Arithmetic",
+        subtitle: "Number system and practical arithmetic for CDS quantitative aptitude.",
+        topics: [
+          "Natural numbers and integers",
+          "Rational and real numbers",
+          "HCF and LCM",
+          "Multiples and factors",
+          "Addition, subtraction, multiplication and division",
+          "Square roots and simplification",
+          "Decimal fractions",
+          "Percentages",
+          "Profit and loss",
+          "Ratio and proportion",
+          "Simple interest",
+          "Compound interest",
+          "Time and work",
+          "Time and distance",
+          "Variation"
+        ]
+      },
+      {
+        category: "CDS Level",
+        subject: "mathematics",
+        title: "Elementary Number Theory",
+        subtitle: "Divisibility, factorisation and logarithmic foundations.",
+        topics: [
+          "Division algorithm",
+          "HCF and LCM",
+          "Divisibility rules",
+          "Prime and composite numbers",
+          "Factorisation theorem basic idea",
+          "Euclidean algorithm",
+          "Remainders basic idea",
+          "Logarithms base 10",
+          "Laws of logarithms"
+        ]
+      },
+      {
+        category: "CDS Level",
+        subject: "mathematics",
+        title: "Algebra",
+        subtitle: "Expressions, equations and foundational algebraic concepts.",
+        topics: [
+          "Algebraic identities",
+          "Polynomials",
+          "Factorisation",
+          "Linear equations in two variables",
+          "Quadratic equations",
+          "Simultaneous equations",
+          "Inequalities",
+          "Set theory basic idea",
+          "Relation between roots and coefficients",
+          "Remainder theorem",
+          "Rational expressions"
+        ]
+      },
+      {
+        category: "CDS Level",
+        subject: "mathematics",
+        title: "Trigonometry",
+        subtitle: "Basic ratios, identities and practical applications.",
+        topics: [
+          "Trigonometric ratios",
+          "Standard angle values",
+          "Basic trigonometric identities",
+          "Use of trigonometric tables",
+          "Heights and distances"
+        ]
+      },
+      {
+        category: "CDS Level",
+        subject: "mathematics",
+        title: "Geometry",
+        subtitle: "Plane geometry and circle-based concepts used in CDS.",
+        topics: [
+          "Lines and angles",
+          "Triangles and congruence",
+          "Similarity of triangles",
+          "Quadrilaterals",
+          "Parallelogram, rectangle and square",
+          "Circles and their properties",
+          "Tangents to circles",
+          "Locus basic idea"
+        ]
+      },
+      {
+        category: "CDS Level",
+        subject: "mathematics",
+        title: "Mensuration",
+        subtitle: "Area, surface area and volume of common figures and solids.",
+        topics: [
+          "Area of triangle",
+          "Area of square and rectangle",
+          "Area of circle",
+          "Perimeter of plane figures",
+          "Surface area of cube and cuboid",
+          "Surface area of cylinder",
+          "Surface area of cone",
+          "Surface area of sphere",
+          "Volume of cube and cuboid",
+          "Volume of cylinder",
+          "Volume of cone",
+          "Volume of sphere"
+        ]
+      },
+      {
+        category: "CDS Level",
+        subject: "mathematics",
+        title: "Statistics",
+        subtitle: "Data organization and basic statistical measures.",
+        topics: [
+          "Data collection and tabulation",
+          "Bar graphs",
+          "Histograms",
+          "Mean",
+          "Median",
+          "Mode",
+          "Tabulation of data",
+          "Frequency distribution"
+        ]
       }
     ];
 
@@ -2759,7 +2984,7 @@
       {
         id: "CDS",
         shortLabel: "CDS",
-        description: "Course shell ready for CDS subjects and chapter sets."
+        description: "Study view for CDS mathematics and later CDS subjects."
       }
     ];
 
@@ -2822,10 +3047,10 @@
       ],
       "CDS": [
         {
-          id: "subjects-coming-soon",
-          title: "Subjects Coming Soon",
-          description: "We will add CDS subjects course-wise next.",
-          available: false
+          id: "mathematics",
+          title: "Mathematics",
+          description: "CDS maths chapters are active now.",
+          available: true
         }
       ]
     };
@@ -2953,6 +3178,7 @@
       if (chapter.category === "Class 11") return "CBSE Class 11";
       if (chapter.category === "Class 12") return "CBSE Class 12";
       if (chapter.category === "NDA Level") return "NDA";
+      if (chapter.category === "CDS Level") return "CDS";
       return "";
     }
 
