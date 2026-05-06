@@ -1002,6 +1002,12 @@
           <p>
             Switch between CBSE Class 11, CBSE Class 12, NDA, CUET, and CDS, then study subject-wise with saved progress, streaks, and clean chapter tracking.
           </p>
+          <div class="flow-chips" aria-label="Study flow">
+            <span class="flow-chip">1 Course</span>
+            <span class="flow-chip">2 Subject</span>
+            <span class="flow-chip">3 Goals</span>
+            <span class="flow-chip">4 Syllabus</span>
+          </div>
 
           <div class="hero-actions">
             <button class="btn btn-primary" id="expandAllBtn" type="button">Expand All Chapters</button>
@@ -1095,38 +1101,52 @@
       </div>
     </section>
 
-    <section class="section-grid">
-      <div class="surface-panel">
-        <h2>Study Dashboard</h2>
-        <p id="dashboardSummary">Build a steady rhythm by clearing a few topics every day and watching your syllabus completion climb.</p>
+    <section class="study-hub">
+      <div class="hub-tabs" role="tablist" aria-label="Study sections">
+        <button class="hub-tab active" type="button" data-hub-target="coursePanel">Course</button>
+        <button class="hub-tab" type="button" data-hub-target="goalsPanel">Goals</button>
+        <button class="hub-tab" type="button" data-hub-target="syllabusPanel">Syllabus</button>
       </div>
-      <div class="surface-panel">
-        <h2>Motivation Badges</h2>
-        <p>Badges unlock as you complete topics, finish chapters, and maintain consistency.</p>
-      </div>
+
+      <section class="hub-panel active" id="coursePanel">
+        <div class="surface-panel stack-section">
+          <h2>Course Switcher</h2>
+          <p id="courseSummary">Choose a course to load its current subject layout. Maths is ready now for CBSE Class 11, CBSE Class 12, and NDA.</p>
+          <div class="course-switcher" id="courseSwitcher"></div>
+          <div class="subject-grid" id="subjectGrid"></div>
+        </div>
+      </section>
+
+      <section class="hub-panel" id="goalsPanel">
+        <div class="section-grid">
+          <div class="surface-panel">
+            <h2>Study Dashboard</h2>
+            <p id="dashboardSummary">Build a steady rhythm by clearing a few topics every day and watching your syllabus completion climb.</p>
+          </div>
+          <div class="surface-panel">
+            <h2>Motivation Badges</h2>
+            <p>Badges unlock as you complete topics, finish chapters, and maintain consistency.</p>
+          </div>
+        </div>
+
+        <section class="surface-panel">
+          <h2>Unlocked Progress Badges</h2>
+          <p>These badges respond automatically to your profile, streak, chapter completion, and overall percentage.</p>
+          <div class="badge-grid" id="badgeGrid"></div>
+        </section>
+      </section>
+
+      <section class="hub-panel" id="syllabusPanel">
+        <div class="section-head">
+          <div>
+            <h2 id="chapterSectionTitle">Course Syllabus</h2>
+            <p id="chapterSectionText">View the currently available subject content for your selected course.</p>
+          </div>
+        </div>
+
+        <main class="chapter-grid" id="chapterGrid"></main>
+      </section>
     </section>
-
-    <section class="surface-panel">
-      <h2>Unlocked Progress Badges</h2>
-      <p>These badges respond automatically to your profile, streak, chapter completion, and overall percentage.</p>
-      <div class="badge-grid" id="badgeGrid"></div>
-    </section>
-
-    <section class="surface-panel">
-      <h2>Course Switcher</h2>
-      <p id="courseSummary">Choose a course to load its current subject layout. Maths is ready now for CBSE Class 11, CBSE Class 12, and NDA.</p>
-      <div class="course-switcher" id="courseSwitcher"></div>
-      <div class="subject-grid" id="subjectGrid"></div>
-    </section>
-
-    <div class="section-head">
-      <div>
-        <h2 id="chapterSectionTitle">Course Syllabus</h2>
-        <p id="chapterSectionText">View the currently available subject content for your selected course.</p>
-      </div>
-    </div>
-
-    <main class="chapter-grid" id="chapterGrid"></main>
 
     <p class="footer-note">Your progress is saved locally in this browser using localStorage.</p>
   </div>
@@ -3128,6 +3148,8 @@
     const courseSummary = document.getElementById("courseSummary");
     const chapterSectionTitle = document.getElementById("chapterSectionTitle");
     const chapterSectionText = document.getElementById("chapterSectionText");
+    const hubTabs = document.querySelectorAll(".hub-tab");
+    const hubPanels = document.querySelectorAll(".hub-panel");
     const saveAllBtn = document.getElementById("saveAllBtn");
     const resetBtn = document.getElementById("resetBtn");
     const expandAllBtn = document.getElementById("expandAllBtn");
@@ -3343,6 +3365,16 @@
       }, 1800);
     }
 
+    function activateHubPanel(panelId) {
+      hubTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.hubTarget === panelId);
+      });
+
+      hubPanels.forEach((panel) => {
+        panel.classList.toggle("active", panel.id === panelId);
+      });
+    }
+
     function getChapterSelections(id, topicsLength) {
       const saved = progressState[id];
       const normalized = Array.from({ length: topicsLength }, (_, index) => Boolean(saved && saved[index]));
@@ -3502,6 +3534,8 @@
           renderSubjectGrid();
           renderChapters();
           updateSummary();
+          activateHubPanel("syllabusPanel");
+          document.getElementById("syllabusPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
         });
       });
     }
@@ -3749,8 +3783,16 @@
       setAllExpanded(false);
     });
 
+    hubTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        activateHubPanel(tab.dataset.hubTarget);
+        document.getElementById(tab.dataset.hubTarget)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
     populateProfileFields();
     ensureActivityCurrent();
+    activateHubPanel("coursePanel");
     renderCourseSwitcher();
     renderSubjectGrid();
     renderChapters();
